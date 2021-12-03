@@ -7,6 +7,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,7 +27,7 @@ public class MainController {
 	
 	@Autowired
 	private Usuariorepository userRepository;
-
+/*
 	  @GetMapping(path="/add") // Map ONLY POST Requests
 	  public @ResponseBody String addNewUser1 (@RequestParam String name
 	      , @RequestParam String email) {
@@ -40,6 +41,8 @@ public class MainController {
 	    return "Dados salvos com sucesso!";
 	  }
 	  
+	  */
+	  
 	  @PostMapping(path="/add") // Map ONLY POST Requests
 	  public @ResponseBody String addNewUser (@RequestParam String name
 	      , @RequestParam String email) {
@@ -48,7 +51,7 @@ public class MainController {
 
 	    Usuarios n = new Usuarios();
 	    n.setLogin(name);
-	    n.setEmail(email);
+	    n.setEmail(new BCryptPasswordEncoder().encode(email));
 	    userRepository.save(n);
 	    return "Saved";
 	  }
@@ -93,11 +96,11 @@ public class MainController {
 		return "testesget";
 	}
 	
-	@RequestMapping("/teste-sql-post")
+	@RequestMapping("/cadastrar")
 	public String TesteSpost() {
 
 		
-		return "testespost";
+		return "cadastrar";
 	}
 	
 	@RequestMapping("/sobre")
