@@ -4,6 +4,7 @@ import java.util.Enumeration;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.CrudRepository;
@@ -16,7 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.sebastiaofortes.security.security.Rolerepository;
 import com.sebastiaofortes.security.security.Usuariorepository;
+import com.sebastiaofortes.security.security.Model.Role;
 import com.sebastiaofortes.security.security.Model.Usuarios;
 
 
@@ -27,21 +30,34 @@ public class MainController {
 	
 	@Autowired
 	private Usuariorepository userRepository;
-/*
-	  @GetMapping(path="/add") // Map ONLY POST Requests
-	  public @ResponseBody String addNewUser1 (@RequestParam String name
-	      , @RequestParam String email) {
-	    // @ResponseBody means the returned String is the response, not a view name
-	    // @RequestParam means it is a parameter from the GET or POST request
+	
+	@Autowired
+	private Rolerepository roleRepository;
 
-	    Usuarios n = new Usuarios();
-	    n.setLogin(name);
-	    n.setEmail(email);
-	    userRepository.save(n);
-	    return "Dados salvos com sucesso!";
+	  @GetMapping(path="/dell") // Map ONLY POST Requests
+	  public @ResponseBody String addNewUser1 (@RequestParam Integer id) {
+	 
+		  userRepository.deleteById(id);
+		    return "Dados deletados com sucesso!";
+	 
+	   
 	  }
 	  
-	  */
+@Transactional
+	  @GetMapping(path="/dell_role") // Map ONLY POST Requests
+	  public @ResponseBody String dellRole(@RequestParam String nomeRole) {
+
+	roleRepository.deleteUR(nomeRole);
+	System.out.println("Relacionamentos excluídos ");
+	  
+	  
+		  roleRepository.deleteByNomeRole(nomeRole);
+		    return "Dados deletados com sucesso!";
+	 
+	  
+	  }
+	  
+	 
 	  
 	  @PostMapping(path="/add") // Map ONLY POST Requests
 	  public @ResponseBody String addNewUser (@RequestParam String name
@@ -55,52 +71,84 @@ public class MainController {
 	    userRepository.save(n);
 	    return "Saved";
 	  }
+	  
+	  @PostMapping(path="/add_role") // Map ONLY POST Requests
+	  public @ResponseBody String addRole(@RequestParam String role) {
 	
-	@RequestMapping("/teste-sql")
-	public String index() {
 
-	    Usuarios n = new Usuarios();
-	    n.setLogin("sebastiao");
-	    n.setEmail("fortes4");
-	    userRepository.save(n);
+	    Role r = new Role();
+	    r.setNomeRole(role);
+
+	    roleRepository.save(r);	
+	    return "Saved";
+	  }	  
+	  
+	  @Transactional
+	  @PostMapping(path="/add_per") // Map ONLY POST Requests
+	  public @ResponseBody String addPer(@RequestParam String usuario, @RequestParam String role) {
+	
+		  roleRepository.insertUR(usuario, role);
+	   
+		  
+	    return "Saved";
+	  }	  
+	  
+	  
+	  @Transactional
+	  @PostMapping(path="/dell_per") // Map ONLY POST Requests
+	  public @ResponseBody String delPer(@RequestParam String usuario, @RequestParam String role) {
+	
+		  roleRepository.deleteOneUR(usuario, role);
+	   
+		  
+	    return "Saved";
+	  }	   
+	  
+	@RequestMapping("/cadastrar_relacionamentos")
+	public String index(ModelMap model) {
+		List<Usuarios> listaU = (List<Usuarios>) userRepository.findAll();
+		model.addAttribute("usuarios", listaU);
+		List<Role> listaR = (List<Role>) roleRepository.findAll();
+		model.addAttribute("roles", listaR);
 		
-		return "testesql";
+		List<String[]> objectList = roleRepository.selectUR();
+		model.addAttribute("rels", objectList);
+		
+		for (String[] obj: objectList) {
+			for(String valor: obj) {
+				System.out.println(valor);
+			}
+		}
+		
+		return "cadastrar_per";
 	}
 	
-	@RequestMapping("/listando")
-	public String listando(ModelMap model) {
+	
+	@RequestMapping("/cadastrar_usu")
+	public String TesteSpost(ModelMap model) {
 
+	
 		List<Usuarios> lista = (List<Usuarios>) userRepository.findAll();
 		int numres = (lista.size());
 		String textres = Integer.toString(numres);
 		model.addAttribute("numeroresultados", textres);
-		model.addAttribute("usuarios", lista);
-		return "listando";
+		model.addAttribute("usuarios", lista);	
+		
+		return "cadastrar_usu";
 	}
 	
-	@RequestMapping("/listando2")
-	public String listando2(ModelMap model) {
+	
+	@RequestMapping("/cadastrar_roles")
+	public String CadastrarRoles(ModelMap model) {
 
-		List<Usuarios> lista = (List<Usuarios>) userRepository.findAll();
+	
+		List<Role> lista = (List<Role>) roleRepository.findAll();
 		int numres = (lista.size());
 		String textres = Integer.toString(numres);
 		model.addAttribute("numeroresultados", textres);
-		model.addAttribute("usuarios", lista);
-		return "listando2";
-	}
-	
-	@RequestMapping("/teste-sql-get")
-	public String TesteSget() {
-
+		model.addAttribute("roles", lista);	
 		
-		return "testesget";
-	}
-	
-	@RequestMapping("/cadastrar")
-	public String TesteSpost() {
-
-		
-		return "cadastrar";
+		return "cadastrar_roles";
 	}
 	
 	@RequestMapping("/sobre")
@@ -115,20 +163,9 @@ public class MainController {
 		return "home";
 	}
 	
-	@RequestMapping("/exibindo")
-	public String exibindo(ModelMap model) {
 
-		   model.addAttribute("nomeDoAtributo", "Informção vinda do código java");
-		return "exibindo";
-	}
 	
-	@RequestMapping("/recebendo")
-	public String recebendo(ModelMap model, @RequestParam String valor) {
 
-		   model.addAttribute("nomeDoAtributo", valor);
-		   
-		return "recebendo";
-	}
 	
 	
 	@RequestMapping("/sessoes")

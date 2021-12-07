@@ -2,6 +2,7 @@ package com.sebastiaofortes.security.security.Model;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
@@ -13,7 +14,15 @@ public class Role implements GrantedAuthority {
 	@Id
 	private String nomeRole;
 	
-	@ManyToMany(mappedBy = "roles")
+	public List<Usuarios> getUsuarios() {
+		return usuarios;
+	}
+
+	public void setUsuarios(List<Usuarios> usuarios) {
+		this.usuarios = usuarios;
+	}
+
+	@ManyToMany(mappedBy = "roles",  cascade = CascadeType.ALL)
 	private List<Usuarios> usuarios;
 	
 	@Override
@@ -31,5 +40,6 @@ public class Role implements GrantedAuthority {
 	}
 
 	
-	
+
+       
 }
