@@ -29,7 +29,7 @@ public class Usuarios implements UserDetails {
 	@Column(name = "nome")
 	private String login;
 	
-	private String email;
+	private String senha;
 
 	public Integer getId() {
 		return Id;
@@ -61,12 +61,12 @@ public class Usuarios implements UserDetails {
 		this.login = login;
 	}
 
-	public String getEmail() {
-		return email;
+	public String getSenha() {
+		return senha;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
+	public void setSenha(String senha) {
+		this.senha = senha;
 	}
 
 	@Override
@@ -78,7 +78,7 @@ public class Usuarios implements UserDetails {
 	@Override
 	public String getPassword() {
 		// TODO Auto-generated method stub
-		return this.email;
+		return this.senha;
 	}
 
 	@Override

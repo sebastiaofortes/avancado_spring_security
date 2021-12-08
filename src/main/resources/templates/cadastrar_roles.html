@@ -7,8 +7,7 @@
 </form> 
 
 <h2>Devido ao relacionamento entre as tabelas Usuario e Roles ser do tipo Muitos para Muitos, 
-é preciso deletar os registros que contenham a respectiva Role na tabela USUARIOS_ROLES.
-Caso isso não seja feito a exclusão da Role vai apresentar erro.
+ao excluir uma role, o código do programa irá excluir também o relacionamento das roles na table Usuario_Roles.
 </h2>
 
 <h1> <span th:text="${numeroresultados}"></span> Resultados encontrados</h1>

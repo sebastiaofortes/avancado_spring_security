@@ -26,7 +26,9 @@ public class SecurityWebConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception{
 		http.csrf().disable().authorizeRequests()
 		.antMatchers(HttpMethod.GET, "/").permitAll()  						// endereço permitido a todos
-		.antMatchers(HttpMethod.POST, "/main/add").hasRole("ADMIN") 				// endereço permitido somente ao admin
+		.antMatchers(HttpMethod.GET, "/main/cadastrar_usu").hasRole("ADMIN") 				// endereço permitido somente ao admin
+		.antMatchers(HttpMethod.GET, "/main/cadastrar_roles").hasRole("ADMIN")
+		.antMatchers(HttpMethod.GET, "/main/cadastrar_per").hasRole("ADMIN")
 		.antMatchers("/h2/*").permitAll()			// endereço permitido a todos // ENDEREÇO DO CONSOLE H2
 		.anyRequest().authenticated()
 		.and().formLogin().permitAll()

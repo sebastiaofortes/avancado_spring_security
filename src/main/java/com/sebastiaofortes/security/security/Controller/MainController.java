@@ -34,7 +34,7 @@ public class MainController {
 	@Autowired
 	private Rolerepository roleRepository;
 
-	  @GetMapping(path="/dell") // Map ONLY POST Requests
+	  @GetMapping(path="/dell_usuario") // Map ONLY POST Requests
 	  public @ResponseBody String addNewUser1 (@RequestParam Integer id) {
 	 
 		  userRepository.deleteById(id);
@@ -59,7 +59,7 @@ public class MainController {
 	  
 	 
 	  
-	  @PostMapping(path="/add") // Map ONLY POST Requests
+	  @PostMapping(path="/add_usuario") // Map ONLY POST Requests
 	  public @ResponseBody String addNewUser (@RequestParam String name
 	      , @RequestParam String email) {
 	    // @ResponseBody means the returned String is the response, not a view name
@@ -67,7 +67,7 @@ public class MainController {
 
 	    Usuarios n = new Usuarios();
 	    n.setLogin(name);
-	    n.setEmail(new BCryptPasswordEncoder().encode(email));
+	    n.setSenha(new BCryptPasswordEncoder().encode(email));
 	    userRepository.save(n);
 	    return "Saved";
 	  }
@@ -113,12 +113,15 @@ public class MainController {
 		
 		List<String[]> objectList = roleRepository.selectUR();
 		model.addAttribute("rels", objectList);
-		
+		/*
+		Laço para percorrer o objeto retornado por selectUR
 		for (String[] obj: objectList) {
 			for(String valor: obj) {
 				System.out.println(valor);
 			}
 		}
+		
+		*/
 		
 		return "cadastrar_per";
 	}

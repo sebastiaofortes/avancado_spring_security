@@ -1,8 +1,8 @@
 <h1> Preencha o formulário abaixo </h1>
-<form action="/main/add" method="POST">
-  <label for="name">name:</label><br>
+<form action="/main/add_usuario" method="POST">
+  <label for="name">Nome:</label><br>
   <input type="text" id="name" name="name"><br>
-  <label for="email">email:</label><br>
+  <label for="email">Senha:</label><br>
   <input type="text" id="email" name="email"><br><br>
   <input type="submit" value="Salvar">
 </form> 
@@ -15,7 +15,7 @@
 <tr>
   <th>ID</th>
   <th>Nome</th>
-  <th>Email</th>
+  <th>Senha</th>
 
 </tr>
 </thead>
@@ -23,10 +23,10 @@
   <tr th:each="usuario : ${usuarios}">
      <td th:text="${usuario.id}">2</td>
     <td th:text="${usuario.login}">Ana Maria Lindoval</td>
-        <td th:text="${usuario.email}">Ana Maria Lindoval</td>
+        <td th:text="${usuario.senha}">Ana Maria Lindoval</td>
    <td> 
    
-   <form action="/main/dell" method="GET">
+   <form action="/main/dell_usuario" method="GET">
   
   <input type="hidden" th:value="${usuario.id}" name="id">
   <input type="submit" value="Deletar">
